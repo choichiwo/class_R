@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # 8.1 준비하기
-- tidyverse로드하라
+- tidyverse<span>로드하라<span>
 
 ```{r}
 library(tidyverse)
