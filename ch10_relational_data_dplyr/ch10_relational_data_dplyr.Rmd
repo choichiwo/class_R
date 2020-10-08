@@ -75,7 +75,7 @@ nycflights13::weather %>% # 각 NYC 공항의 매 시각 날씨 정보
 ```  
 
 * **그림으로 정리**  
-![img1](./img/img1.png){width="400"}  
+![img1](./image/img1.png){width="400"}  
 cf) airports와 weather 관계가 빠진 그림  
 
 * **이해해야 할 관계**
@@ -128,7 +128,7 @@ flights_latlon %>%
    다이어그램도 그려보아라. 
    
    airports$faa는 weather$origin의 외래키이다.  
-![img2](./img/img2.png){width="400"} 
+![img2](./image/img2.png){width="400"} 
 
 3. weather는 출발지 NYC 공항 정보만 포함한다.  
    미국 모든 공항의 날씨 기록이 포함되어 있다면 flights와 어떤 관계가 추가되는가?
@@ -312,7 +312,7 @@ flights2 %>%
 
 ### 4-1. 조인 이해하기
 조인 작동법 배우기  
-![img3](./img/img3.png){width="200"} 
+![img3](./image/img3.png){width="200"} 
 
 ```{r}
 x <- tribble(~key, ~val_x,
@@ -332,15 +332,15 @@ y
 
 조인이란?
 x의 각 행을 y의 0, 1개 또는 여러 행에 연결하는 방법  
-![img4](./img/img4.png){width="200"}  
+![img4](./image/img4.png){width="200"}  
 
 실제 조인에서는 매치 항목이 점으로 표시됨  
 (점 수 = 매치 수 = 출력 행 수)  
-![img5](./img/img5.png){width="400"}
+![img5](./image/img5.png){width="400"}
 
 ### 4-2. 내부 조인
 inner join: 키가 같을 때마다 두 관측값을 매칭함  
-![img6](./img/img6.png){width="400"}
+![img6](./image/img6.png){width="400"}
 
 내부 조인 출력은 키, x 값과 y 값을 포함하는 새로운 데이터 프레임  
 by를 사용하여 어떤 변수가 키인지 결정  
@@ -363,10 +363,10 @@ by를 사용하여 어떤 변수가 키인지 결정
 각 테이블에 '가상' 관측값을 추가하여 작동하는데,  
 이 관측값에는 항상 매칭되는 키(다른 키 매칭 안 되는 경우)와 NA로 채워진 값이 있음
 
-![img7](./img/img7.png){width="400"}  
+![img7](./image/img7.png){width="400"}  
 
 벤 다이어그램으로 서로 다른 유형의 조인 묘사하기  
-![img8](./img/img8.png){width="400"}   
+![img8](./image/img8.png){width="400"}   
 cf) 벤 다이어그램은 키가 고유하게 관측값을 식별하지 못할 때, 발생하는 문제를 표현하지 못함  
 
 ### 4-4. 중복키  
@@ -374,7 +374,7 @@ cf) 벤 다이어그램은 키가 고유하게 관측값을 식별하지 못할 
 
 - 하나의 테이블에 중복키가 있는 경우  
   : 중복키는 추가 정보를 넣을 때 유용한데 일반적으로 일대다 관계가 있기 때문  
-![img9](./img/img9.png){width="400"} 
+![img9](./image/img9.png){width="400"} 
 ```{r}
 x <- tribble(
    ~key, ~val_x,
@@ -392,7 +392,7 @@ left_join(x, y, by = "key")
 - 두 테이블 모두 중복키가 있는 경우  
   : 키가 어느 테이블에서도 고유하게 관측값을 식별하지 않음 -> 일반적 오류  
   : 중복키로 조인하면 가능한 모든 조합인 데카르트곱(Cartesian product)을 얻을 수 있음  
-![img10](./img/img10.png){width="400"}  
+![img10](./image/img10.png){width="400"}  
 ```{r}
 y <- tribble(
    ~key, ~val_y,
@@ -484,13 +484,13 @@ flights_locations %>%
 
 ### + 기타 구현  
 base::merge()는 4가지 유형의 뮤테이팅 조인을 수행할 수 있음  
-![img14](./img/img14.png){width="400"}  
+![img14](./image/img14.png){width="400"}  
 
 특정 dplyr 동사 장점은 코드 의도를 더 명확하게 전달하는 것
 -> 조인 간의 차이는 중요하지만 merge() 인수에 있음, dplyr 조인은 상당히 빠르고 행 순서를 어지럽히지 않음
 
 dplyr 규칙은 SQL에 기반하여 서로 옮겨쓰기 쉬움  
-![img15](./img/img15.png){width="400"}  
+![img15](./image/img15.png){width="400"}  
   
 inner 및 outer는 선택사항으로 종종 생략됨  
 
@@ -529,14 +529,14 @@ flights %>%
    semi_join(top_dest) %>%
    print(n = 6, width = Inf)
 ```  
-![img11](./img/img11.png){width="400"}  
+![img11](./image/img11.png){width="400"}  
   
 매칭 여부만이 중요할 뿐, 어떤 관측값이 매칭되는지는 중요하지 않음  
 -> 뮤테이팅 조인처럼 행을 복제하지는 않음을 의미  
-![img12](./img/img12.png){width="400"}  
+![img12](./image/img12.png){width="400"}  
   
 anti_join은 semi_join의 반대이며, 매칭되지 않는 행을 보존함  
-![img13](./img/img13.png){width="400"}   
+![img13](./image/img13.png){width="400"}   
 anti_join은 조인 불일치를 진단할 때 유용함  
 ex) 항공편과 여객기를 연결하는 경우, 여객기에 매칭되지 않는 항공편이 많음을 알고 싶을 수 있음  
 ```{r}
