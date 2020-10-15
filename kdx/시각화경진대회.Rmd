@@ -1,0 +1,179 @@
+---
+title: "시각화 경진대회"
+author: "choi"
+date: '2020 10 6 '
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+
+
+```{r}
+sessionInfo()
+```
+```{r}
+readr::guess_encoding("data/Samsungcard.csv", n_max = 100)
+```
+
+```{r}
+
+samsung_card <- read_xlsx("data/Samsungcard.xlsx")
+```
+
+```{r}
+head(samsung_card)
+```
+```{r}
+shinhancard <- read_xlsx("data/Shinhancard.xlsx")
+```
+```{r}
+head(shinhancard)
+```
+
+```{r}
+shinhancard <- shinhancard %>% 
+  select(-c(6:8))
+```
+
+```{r}
+head(shinhancard)
+```
+
+```{r}
+gin_8a <- read_csv("data/GIN00008A.csv")
+```
+```{r}
+gin_9a <- read_csv("data/GIN00009A.csv")
+```
+```{r}
+glimpse(gin_8a)
+```
+```{r}
+glimpse(gin_9a)
+```
+```{r}
+library(jsonlite)
+```
+```{r}
+GIN_10m <- fromJSON("data/center_GIN00010M.json")
+```
+```{r}
+glimpse(GIN_10m)
+```
+```{r}
+readr::guess_encoding("data/Mcorporation/KDX시각화경진대회_SSC_DATA.csv")
+```
+```{r}
+ssc_data <- read_csv("data/Mcorporation/KDX시각화경진대회_SSC_DATA.csv", locale = locale("ko", encoding = "EUC-KR"))
+```
+```{r}
+glimpse(ssc_data)
+```
+```{r}
+files <- list.files(path = "data/Mcorporation/상품 카테고리 데이터_KDX 시각화 경진대회 Only", pattern = "*.xlsx", full.names = T)
+```
+
+
+```{r}
+products <- sapply(files, read_excel, simplify=FALSE) %>% 
+  bind_rows(.id = "id")
+```
+```{r}
+glimpse(products)
+```
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+cat_rev <- products %>%
+  group_by(카테고리명) %>% 
+  summarise(mean = mean(구매금액)) %>% 
+  arrange(desc(mean))
+
+```
+```{r}
+cat_rev <- cat_rev[order(cat_rev$mean, decreasing = TRUE), ]
+```
+```{r}
+cat_rev$카테고리명 <- factor(cat_rev$카테고리명, levels = cat_rev$카테고리명)
+```
+
+```{r}
+head(cat_rev)
+```
+
+
+```{r}
+ggplot(cat_rev %>% head(20), aes(x = 카테고리명, y = mean)) + 
+  geom_bar(stat="identity", width=.5, fill="tomato3") + 
+  theme(axis.text.x = element_text(angle=65, vjust=0.6)) + 
+  labs(title="Ordered Bar Chart", 
+       subtitle="카테고리명 Vs Avg. 구매금액", 
+       caption="source: products")
+```
+
+```{r}
+cat_rev2 <- products %>%
+  group_by(고객나이) %>% 
+  summarise(mean = mean(구매금액)) %>% 
+  arrange(desc(mean))
+
+```
+```{r}
+cat_rev <- cat_rev[order(cat_rev$mean, decreasing = TRUE), ]
+```
+
+
+```{r}
+category_list <- cat_rev$카테고리명
+category_list
+```
+```{r}
+temp_products <- sample_n(products, 1000)
+g <- ggplot(temp_products, aes(x = 구매수, y = 구매금액))
+
+```
+
+```{r}
+temp_products <- sample_n(products, 1000)
+
+g <- ggplot(temp_products, aes(x = 구매수, y = 구매금액)) 
+```
+
+```{r}
+g + geom_point(aes(colour = 고객성별)) + 
+  scale_x_log10() + 
+  scale_y_log10() + 
+  labs(subtitle="products: count vs revenue ", 
+       y="revenue", 
+       x="count", 
+       title="Counts Plot")
+```
+
+```{r}
+g <- ggplot(temp_products, aes(x = 구매수, y = 구매금액))
+
+g + geom_point(col="tomato3") + 
+  scale_x_log10() + 
+  scale_y_log10() + 
+  facet_grid(고객성별 ~.) + 
+  labs(subtitle="products: count vs revenue ", 
+       y="revenue", 
+       x="count", 
+       title="Counts Plot")
+```
+
