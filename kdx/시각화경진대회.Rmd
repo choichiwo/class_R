@@ -177,3 +177,90 @@ g + geom_point(col="tomato3") +
        title="Counts Plot")
 ```
 
+
+```{r}
+gender_products <- products %>% 
+  filter(고객성별 != "없음")
+
+dim(products); dim(gender_products)
+```
+
+```{r}
+temp_products <- sample_n(gender_products, 1000)
+g <- ggplot(temp_products, aes(x = 구매수, y = 구매금액))
+# g + geom_count(col="tomato3", show.legend=F) +
+g + geom_point(col="tomato3") + 
+  scale_x_log10() + 
+  scale_y_log10() + 
+  facet_grid(고객성별 ~.) + 
+  labs(subtitle="products: count vs revenue ", 
+       y="revenue", 
+       x="count", 
+       title="Counts Plot")
+```
+```{r}
+cat_rev <- products %>%
+  group_by(카테고리명, 고객성별) %>% 
+  summarise(mean = mean(구매금액)) %>% 
+  arrange(desc(mean)) 
+```
+```{r}
+glimpse(cat_rev)
+```
+```{r}
+cat_rev <- cat_rev[order(cat_rev$mean, decreasing = TRUE), ]
+
+cat_rev
+```
+
+```{r}
+cat_rev2 <- cat_rev %>% 
+  filter(고객성별 != "없음")
+
+```
+```{r}
+cat_rev2
+```
+
+```{r}
+ggplot(cat_rev2, aes(x = 카테고리명, y = mean, fill = 고객성별)) +
+  geom_bar(stat="identity", position = "dodge", width=.5)
+```
+
+```{r}
+i = 1
+j = i+7
+category_list <- as.character(category_list)
+
+cat_rev2 %>% 
+  filter(카테고리명 %in% category_list[c(i:as.numeric(i+7))]) %>% 
+  ggplot(aes(x = 카테고리명, y = mean, fill = 고객성별)) +
+  geom_bar(stat="identity", position = "dodge", width=.5) + 
+  theme(axis.text.x = element_text(angle=65, vjust=0.6)) + 
+  labs(title="Ordered Bar Chart", 
+       subtitle="카테고리명 Vs Avg. 구매금액 by 고객성별", 
+       caption="source: products")
+```
+```{r}
+category_graph <- function(df, cat_list = cat_list) {
+  category_list <- sort(as.character(cat_list))
+  
+  print(category_list)
+  for (i in seq(1, 64, by = 8)) {
+    i = i
+    j = i+7
+    plot <- df %>% 
+      filter(카테고리명 %in% category_list[i:j]) %>% 
+      ggplot(aes(x = 카테고리명, y = mean, fill = 고객성별)) +
+      geom_bar(stat="identity", position = "dodge", width=.5) + 
+      theme(axis.text.x = element_text(angle=65, vjust=0.6)) + 
+      labs(title="Ordered Bar Chart", 
+           subtitle="카테고리명 Vs Avg. 구매금액 by 고객성별", 
+           caption="source: products")
+    
+    print(plot)
+  }
+}
+
+category_graph(cat_rev2, category_list)
+```
