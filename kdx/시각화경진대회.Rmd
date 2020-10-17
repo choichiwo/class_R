@@ -83,6 +83,7 @@ glimpse(ssc_data)
 ```
 ```{r}
 files <- list.files(path = "data/Mcorporation/상품 카테고리 데이터_KDX 시각화 경진대회 Only", pattern = "*.xlsx", full.names = T)
+
 ```
 
 
@@ -241,9 +242,10 @@ cat_rev2 %>%
        subtitle="카테고리명 Vs Avg. 구매금액 by 고객성별", 
        caption="source: products")
 ```
+
+
 ```{r}
-category_graph <- function(df, cat_list = cat_list) {
-  category_list <- sort(as.character(cat_list))
+category_graph <- function(df, cat_list = cat_list) {category_list <- sort(as.character(cat_list))
   
   print(category_list)
   for (i in seq(1, 64, by = 8)) {
@@ -254,7 +256,7 @@ category_graph <- function(df, cat_list = cat_list) {
       ggplot(aes(x = 카테고리명, y = mean, fill = 고객성별)) +
       geom_bar(stat="identity", position = "dodge", width=.5) + 
       theme(axis.text.x = element_text(angle=65, vjust=0.6)) + 
-      labs(title="Ordered Bar Chart", 
+      labs(title="Ordered Bar Chart",
            subtitle="카테고리명 Vs Avg. 구매금액 by 고객성별", 
            caption="source: products")
     
@@ -264,3 +266,99 @@ category_graph <- function(df, cat_list = cat_list) {
 
 category_graph(cat_rev2, category_list)
 ```
+
+
+```{r}
+economics$returns_perc <- c(0, diff(economics$psavert)/economics$psavert[-length(economics$psavert)])
+```
+
+
+```{r}
+ggplot(economics, aes(x=date)) + 
+  geom_line(aes(y=returns_perc)) + 
+  labs(title="Time Series Chart", 
+       subtitle="Returns Percentage from 'Economics' Dataset", 
+       caption="Source: Economics", 
+       y="Returns %")
+```
+
+```{r}
+glimpse(economics)
+```
+```{r}
+class(economics$date)
+```
+
+```{r}
+temp_date <- "20200110"
+conv_date <- as.Date(temp_date, format = "%Y%m%d")
+print(conv_date)
+```
+```{r}
+class(conv_date)
+```
+
+```{r}
+glimpse(shinhancard)
+```
+```{r}
+shinhancard$일별 <- as.Date(shinhancard$일별, format = "%Y%m%d")
+```
+```{r}
+glimpse(shinhancard)
+```
+
+```{r}
+ggplot(shinhancard, aes(x=일별)) + 
+  geom_line(aes(y=`카드이용건수(천건)`)) + 
+  labs(title="Time Series Chart", 
+       subtitle="Returns Percentage from 'Economics' Dataset", 
+       caption="Source: Economics", 
+       y="Returns %")
+```
+```{r}
+shinhancard %>% 
+  filter(일별 == "2019-01-01") %>% 
+  dim()
+```
+
+```{r}
+shinhancard %>% 
+  rename(date = "일별") %>% 
+  group_by(date) %>% 
+  summarise(mean = mean(`카드이용건수(천건)`)) %>% 
+  ggplot(aes(x=date)) + 
+  geom_line(aes(y=mean)) + 
+  theme(axis.text.x = element_text(angle=65, vjust=0.6)) + 
+  labs(title="Time Series Chart", 
+       subtitle="Avg. Sales from 'Shinhan Card' Dataset", 
+       caption="Source: Shinhan Card", 
+       y="Avg. Sales (1000)") + 
+  theme_bw()
+```
+
+```{r}
+shinhancard %>% 
+  rename(date = "일별", gender = "성별") %>%    
+  group_by(date, gender) %>% 
+  summarise(mean = mean(`카드이용건수(천건)`)) %>% 
+  ggplot(aes(x=date)) + 
+  geom_line(aes(y=mean, colour = gender)) + 
+  labs(title="Time Series Chart", 
+       subtitle="Avg. Sales from 'Shinhan Card' Dataset", 
+       caption="Source: Shinhan Card", 
+       y="Avg. Sales (1000)")
+```
+```{r}
+shinhancard %>% 
+  rename(date = "일별") %>%  
+  group_by(date, 연령대별) %>% 
+  summarise(mean = mean(`카드이용건수(천건)`)) %>% 
+  ggplot(aes(x=date)) + 
+  geom_line(aes(y=mean, colour = 연령대별)) + 
+  labs(title="Time Series Chart", 
+       subtitle="Avg. Sales from 'Shinhan Card' Dataset", 
+       caption="Source: Shinhan Card", 
+       y="Avg. Sales (1000)")
+```
+
