@@ -1,7 +1,4 @@
 <<<<<<< HEAD
-# Chapter 1. 데이터 시각화
+# gandlim
 
 
-test~ 
-
-깃허브에서 작업함
