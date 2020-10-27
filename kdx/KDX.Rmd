@@ -1,21 +1,17 @@
 ---
-title: "KDX"
-author: ""
-output: 
+title: "kdx"
+date: ''
+output:
   html_document:
     toc: true
-    toc_float:
-      collapsed: false
-      smooth_scroll: false
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
-                      warning = FALSE,
-                      message = FALSE)
+                      warning = FALSE, message = FALSE)
 ```
 
-#준비하기
 ```{r}
 library(tidyverse) # 데이터 가공 및 시각화
 library(readxl) # 엑셀파일 불러오기 패키지
@@ -30,12 +26,14 @@ library(WRS)
 library(utils)
 ```
 
-# 데이터 불러오기 및 통합
+
 ```{r}
 files <- list.files(path = "data/Mcorporation/상품 카테고리 데이터_KDX 시각화 경진대회 Only/", pattern = "*.xlsx", full.names = TRUE) # 다중 엑셀파일 불러오기
 
 glimpse(files)
+```
 
+```{r}
 # KDX_CONTEST_파일정의서.xlsx : 파일 제외
 products <- sapply(files[2:65], read_excel, simplify=FALSE) %>% 
   bind_rows(.id = "id") %>% 
@@ -43,7 +41,6 @@ products <- sapply(files[2:65], read_excel, simplify=FALSE) %>%
 
 glimpse(products)
 ```
-
 
 #기술적 통계량
 ```{r}
@@ -268,6 +265,8 @@ ind.t.test<-t.test(mean ~ OS유형, data = products1)
 
 ind.t.test
 ```
+
+
 
 
 
