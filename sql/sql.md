@@ -37,7 +37,9 @@ FROM tb_customer;
 ![](img./img2.png)
 
 - 설명
-고객 테이블(tb_customer)에서 고객코드(customer_cd), 고객명(customer_nm), 전화번호(phone_number), 이메일(email)을 검색하면서 영문 필드명인 customer_cd는 '고객코드'등으로 바꿨다.
+고객 테이블(tb_customer)에서 고객코드(customer_cd), 고객명(customer_nm), 전화번호(phone_number), 이메일(email)을 검색했다. 이 명령은 필드가 많은 테이블에서 필요한 내용만 검색한다.
+
+예제 #3 rhror xpdlqmf
 
 - SQL
 SELECT customer_cd,
@@ -47,7 +49,7 @@ SELECT customer_cd,
 FROM tb_customer;    
 
 - 결과
-![](img./img2.png)
+![](img./img3.png)
 
 - 설명
 고객 테이블(tb_customer)에서 고객코드(customer_cd), 고객명(customer_nm), 전화번호(phone_number), 이메일(email)을 검색하면서 영문 필드명인 customer_cd는 '고객코드'등으로 바꿨다.
