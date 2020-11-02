@@ -73,8 +73,7 @@ FROM tb_customer
 WHERE mw_flg = 'M';    
 
 - 결과
-![](img./img4   
-.png)
+![](img./img4.png)
 
 - 설명
 고객 테이블(tb_customer)에서 성별(MW_flg)이 남성('M')인 조건으로 검색했다. 성별이 모두 'M'인지 확인한다. 성별은 'M'이 남성이고 'W'는 여성이다.
@@ -92,3 +91,80 @@ WHERE customer_nm = '김한길';
 
 - 설명
 고객 테이블(tb_customer)에서 고객명(customer_nm)이 '김한길'인 조건으로 검색했다.
+
+### 8.3 AND
+
+구문 #1 SELECT 검색필드명
+
+구문 #2 FROM 테이블명
+
+구문 #3 WHERE 조건식1 AND 조건식2 AND ... 조건식n;
+
+예제 #1 고객 테이블에서 2019년 이후 등록한 여성 고객을 검색한다.
+
+- SQL
+SELECT
+    *
+FROM tb_customer
+WHERE customer_cd > '2019000'
+and mw_flg = 'W';   
+
+- 결과
+![](img./img6.png)
+
+- 설명
+고객 테이블(tb_customer)에서 고객코드(customer_cd)가 '2019000'보다 크고 성별(MW_flg)이 여성('W')인 조건으로 검색했다. 
+
+예제 #2 고객 테이블에서 남성이면서 출생 연도가 '1990'년 미만인 고객을 검색한다.
+
+- SQL
+SELECT
+    *
+FROM tb_customer
+WHERE birth_day < '19900101'
+and mw_flg = 'M';   
+
+- 결과
+![](img./img7.png)
+
+- 설명
+고객 테이블(tb_customer)에서 성별(MW_flg)이 남성('M')이고 생년월일(birth_day)이 '19900101' 미만인 조건으로 검색했다.
+
+### 8.4 OR
+
+구문 #1 SELECT 검색필드명
+
+구문 #2 FROM 테이블명
+
+구문 #3 WHERE 조건식1 OR 조건식2 OR ... 조건식n;
+
+예제 #1 고객 테이블에서 생년월일이 '19900101' 이후거나 누적포인트가 20,000이상인 고객을 검색한다.
+
+- SQL
+SELECT
+    *
+FROM tb_customer
+WHERE birth_day >= '19900101'
+OR total_point >= 20000;   
+
+- 결과
+![](img./img8.png)
+
+- 설명
+고객 테이블(tb_customer)에서 생년월일(birth_day)이 '19900101' 이후거나, 누적포인트(total_point)가 20,000 이상인 조건으로 검색했다. 
+
+예제 #2 고객 테이블에서 남성인 고객 중 생년월일이 '19700101' 이전이거나 누적포인트가 20,000 이상인 고객을 검색한다.
+
+- SQL
+SELECT
+    *
+FROM tb_customer
+WHERE mw_flg = 'M'
+and (birth_day < '19700101'
+OR total_point >= 20000);  
+
+- 결과
+![](img./img9.png)
+
+- 설명
+고객 테이블(tb_customer)에서 성별(MW_flg)이 남성('M')인 고객 중  생년월일(birth_day)이 '19700101' 이전이거나 누적포인트(total_point)가 20,000 이상인 조건으로 검색했다.
