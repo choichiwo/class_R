@@ -21,7 +21,7 @@ SELECT
 FROM tb_customer;
 
 - 결과
-![](img./img1.png)
+![](https://user-images.githubusercontent.com/72365762/97836873-915ecc00-1d20-11eb-87e3-74a5ec386d26.png)
 
 - 설명
 SELECT 명령에 '*' 문자를 지정해 고객 테이블의 전체 내용을 검색했다. 이SQL은 테이블의 모든 내용을 검색하는 가장 기본적인 명령이다.
@@ -131,6 +131,45 @@ and mw_flg = 'M';
 고객 테이블(tb_customer)에서 성별(MW_flg)이 남성('M')이고 생년월일(birth_day)이 '19900101' 미만인 조건으로 검색했다.
 
 ### 8.4 OR
+
+구문 #1 SELECT 검색필드명
+
+구문 #2 FROM 테이블명
+
+구문 #3 WHERE 조건식1 OR 조건식2 OR ... 조건식n;
+
+예제 #1 고객 테이블에서 생년월일이 '19900101' 이후거나 누적포인트가 20,000이상인 고객을 검색한다.
+
+- SQL
+SELECT
+    *
+FROM tb_customer
+WHERE birth_day >= '19900101'
+OR total_point >= 20000;   
+
+- 결과
+![](img./img8.png)
+
+- 설명
+고객 테이블(tb_customer)에서 생년월일(birth_day)이 '19900101' 이후거나, 누적포인트(total_point)가 20,000 이상인 조건으로 검색했다. 
+
+예제 #2 고객 테이블에서 남성인 고객 중 생년월일이 '19700101' 이전이거나 누적포인트가 20,000 이상인 고객을 검색한다.
+
+- SQL
+SELECT
+    *
+FROM tb_customer
+WHERE mw_flg = 'M'
+and (birth_day < '19700101'
+OR total_point >= 20000);  
+
+- 결과
+![](img./img9.png)
+
+- 설명
+고객 테이블(tb_customer)에서 성별(MW_flg)이 남성('M')인 고객 중  생년월일(birth_day)이 '19700101' 이전이거나 누적포인트(total_point)가 20,000 이상인 조건으로 검색했다.
+
+### 8.5 BETWEEN .. AND
 
 구문 #1 SELECT 검색필드명
 
