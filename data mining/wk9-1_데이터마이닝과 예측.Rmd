@@ -1,0 +1,143 @@
+---
+title: "wk9-1_데이터마이닝과 예측"
+author: "choi"
+date: '2020 10 6 '
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                       warning = FALSE, message = FALSE)
+```
+
+
+```{r}
+library(tidyverse)
+library(modelr)
+library(ggplot2)
+library(car)
+
+```
+
+# 다중회귀분석1
+1. 데이터마이닝
+ - 데이터마이닝, 통계모델, 기계학습, 인공지능...
+ - Supervised learning, Unsupervied learning
+
+## 1.데이터 마이닝 기법 
+
+데이터 마이닝 : 예측 -> 회귀분석, 선형모형, 비선형모형           
+                분류 -> 의사결정나무, 서포트백터 머신,판별분석, 로지스틱회귀모형
+
+- 다중회귀모형
+ -종속변수 Y를 설명하는데  k개의 독립변수 X~1~,....x~k~있을때 다중회귀모형은 다음과 같이 정의
+ 
+
+ 
+# set working directory
+setwd("C:\\Users\\user\\Desktop\\class_R\\data mining\\data")
+
+# autompg data
+
+```{r}
+car<-read.csv(file.choose())
+head(car)
+str(car)
+attach(car)
+```
+
+
+
+## 2.다중회귀분석
+- 다중회귀모형 : lm(y변수~x1+x2+x3, data= )
+
+# multiple regression : 1st full model 
+
+```{r}
+r1<-lm(mpg ~ disp+hp+wt+accler, data=car)
+summary(r1)
+```
+
+
+
+- 선형회귀식
+mpg = 40.88 - 0.011 disp + 0.0048 hp - 0.0061 wt + 0.17 accler
+
+- 선형 회귀식의 결정계수
+R2=0.7006
+
+
+- 다중회귀모형: 데이터탐색
+# pariwise plot - Explanatory Data Analysis
+
+```{r}
+var1<-c("mpg","disp","hp","wt", "accler" )
+pairs(car[var1], main ="Autompg",cex=1, col=as.integer(car$cyl))
+```
+
+
+
+# 3 다중회귀분석 - 변수선택방벙
+- 변수선택방법 – 다수의 독립변수들이 있을때 최종모형은?
+(1) 전진선택법(forward selection) - 독립변수중에서 종속변수에 가장 큰 영향을 주는 변수부터 모형에 포함
+
+(2) 후진제거법(backward elimination)
+-독립변수를 모두 포함한 모형에서 가장 영향이적은(중요하지 않은) 변수부터 제거
+(3) 단계별 방법(stepwise method)
+-전진선택법에 의해 변수 추가
+-변수 추가시 기존 변수의 중요도가 정해진 유의수준(threshold)에 포함되지 않으면 앞에서 들어간 변수도 다시 제거됨
+```
+단계별방법의 예제
+모형에 포함되는 유의수준(0.15)
+모형에서 제거되는 유의수준(0.15)
+step1 : x4 (p-value=0.01)
+step2: x4 (0.01), x10 (0.03)
+step3: x4 (0.01), x10 (0.2), x2 (0.12)
+step4: x4, x2
+step5: x4, x2, x5
+```
+- 단계별 방법(stepwise method)
+-step(모형, direction=“both”)
+
+# 2rd model using variable selection method
+# step(r1, direction="forward")
+# step(r1, direction="backward")
+# stepwise selection
+```{r}
+step(r1, direction="both")
+```
+#step(lm(mpg ~ disp+hp+wt+accler, data=car), direction="both")
+
+R2가 가장 높은 조합의 변수그룹을 선택
+(AIC가 낮은 조합의 변수그룹을 선택)
+변수 제거: hp
+최종 변수 선택: disp, wt, accler
+
+
+- 단계별 방법에 따른 최종 다중회귀모형
+
+# final multiple regression
+```{r}
+r2<-lm(mpg ~ disp+wt+accler, data=car)
+summary(r2)
+```
+```
+선형회귀식
+mpg = 41.30 - 0.011 disp- 0.0062 wt + 0.17 accler
+
+선형회귀식의 결정계수
+R2=0.7004
+```
+
+
+# residual diagnostic plot 
+```{r}
+layout(matrix(c(1,2,3,4),2,2)) # optional 4 graphs/page 
+plot(r2)
+```
+
+
+
