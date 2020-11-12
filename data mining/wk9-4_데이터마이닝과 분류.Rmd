@@ -1,0 +1,83 @@
+---
+title: "wk9-4_데이터마이닝과 분류"
+author: "choi"
+date: '2020 11 12 '
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                       warning = FALSE, message = FALSE)
+```
+
+# wk9-4 : 데이터마이닝과 분류
+
+## 3.iris 데이터 설명
+-iris 데이터 (붓꽃 데이터)  
+1. 꽃잎의 폭과 길이에 대한 4개 변수로 꽃의 종류를 예측하는 것이 목적  
+2. 타겟변수(y) : setosa, versicolor, virginica
+
+
+- iris 데이터 (iris.csv)
+
+```{r}
+# set working directory
+setwd("C:\\Users\\user\\Desktop\\class_R\\data mining\\data")
+```
+
+## 4.학습데이터와 검증데이터
+- k- fold cross-validation (k =3,5,10)
+
+![](img./8.png)
+
+```{r}
+# read csv file
+iris<-read.csv(file.choose())
+head(iris)
+str(iris)
+attach(iris)
+```
+
+## 5.학습데이터와 검증데이터 생성
+- iris 데이터 (iris.csv) - 150개 데이터
+
+```{r}
+# training/ test data : n=150
+set.seed(1000, sample.kind="Rounding")
+N=nrow(iris)
+tr.idx=sample(1:N, size=N*2/3, replace=FALSE)
+tr.idx
+```
+tr.idx는 100개의 무작위로 선정된 100개의 데이터 아이디
+
+- set.seed는 난수 생성 시 처음 시작값을 주어 동일한 훈련표본 사용(set.seed를 지정하지 않으면 매번 다른 훈련표본 생성)
+- train/test를 2:1로 랜덤 분할(100/50, n=150)
+```{r}
+# attributes in training and test
+iris.train<-iris[tr.idx,-5]
+iris.test<-iris[-tr.idx,-5]
+```
+- iris 데이터를 cross-validation을 위해 분할함
+
+iris.train=iris[tr.idx, -5] 5번째 열의 종속변수를 제외한 100개의 데이터  
+iris.test=iris[-tr.idx, -5] 5번째 열의 종속변수를 제외한 50개의 데이터
+
+
+
+- iris 데이터의 타겟변수 (학습데이터의 타겟변수, 검증데이터의 타겟변수)
+```{r}
+# target value in training and test
+trainLabels<-iris[tr.idx,5]
+testLabels<-iris[-tr.idx,5]
+```
+
+
+```{r}
+# to get frequency of class in test set
+table(testLabels)
+```
+
+

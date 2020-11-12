@@ -1,7 +1,7 @@
 ---
 title: "wk9-1_데이터마이닝과 예측"
 author: "choi"
-date: '2020 10 6 '
+date: '2020 11 11 '
 output:
   html_document:
     toc: true
@@ -40,9 +40,9 @@ library(car)
 # set working directory
 setwd("C:\\Users\\user\\Desktop\\class_R\\data mining\\data")
 
-# autompg data
 
 ```{r}
+# autompg data
 car<-read.csv(file.choose())
 head(car)
 str(car)
@@ -54,9 +54,10 @@ attach(car)
 ## 2.다중회귀분석
 - 다중회귀모형 : lm(y변수~x1+x2+x3, data= )
 
-# multiple regression : 1st full model 
+
 
 ```{r}
+# multiple regression : 1st full model 
 r1<-lm(mpg ~ disp+hp+wt+accler, data=car)
 summary(r1)
 ```
@@ -71,9 +72,10 @@ R2=0.7006
 
 
 - 다중회귀모형: 데이터탐색
-# pariwise plot - Explanatory Data Analysis
+
 
 ```{r}
+# pariwise plot - Explanatory Data Analysis
 var1<-c("mpg","disp","hp","wt", "accler" )
 pairs(car[var1], main ="Autompg",cex=1, col=as.integer(car$cyl))
 ```
@@ -102,14 +104,16 @@ step5: x4, x2, x5
 - 단계별 방법(stepwise method)
 -step(모형, direction=“both”)
 
+
+```{r}
 # 2rd model using variable selection method
 # step(r1, direction="forward")
 # step(r1, direction="backward")
 # stepwise selection
-```{r}
 step(r1, direction="both")
-```
 #step(lm(mpg ~ disp+hp+wt+accler, data=car), direction="both")
+```
+
 
 R2가 가장 높은 조합의 변수그룹을 선택
 (AIC가 낮은 조합의 변수그룹을 선택)
@@ -119,8 +123,9 @@ R2가 가장 높은 조합의 변수그룹을 선택
 
 - 단계별 방법에 따른 최종 다중회귀모형
 
-# final multiple regression
+
 ```{r}
+# final multiple regression
 r2<-lm(mpg ~ disp+wt+accler, data=car)
 summary(r2)
 ```
@@ -133,8 +138,8 @@ R2=0.7004
 ```
 
 
-# residual diagnostic plot 
 ```{r}
+# residual diagnostic plot 
 layout(matrix(c(1,2,3,4),2,2)) # optional 4 graphs/page 
 plot(r2)
 ```
