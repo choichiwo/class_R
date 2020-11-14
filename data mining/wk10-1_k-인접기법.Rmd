@@ -119,10 +119,14 @@ help(CrossTable)
 - 오분류율 : 3/50 -> 6%
 ```
 
-# lec10_2_knn.R
-# optimal k
-# Weighted knn
+# wk10-2_k-인접기법
 
+## 6.kNN에서 최적 k 탐색
+- 최적 k의 탐색 : 1 to nrow(train_data)/2 (여기서는 1 to 50 까지)
+
+
+
+```{r}
 # optimal k selection (1 to n/2)
 accuracy_k <- NULL
 # try k=1 to nrow(train)/2, may use nrow(train)/3(or 4,5) depending the size of n in train data
@@ -138,14 +142,33 @@ for(kk in c(1:nnum))
 test_k<-data.frame(k=c(1:nnum), accuracy=accuracy_k[c(1:nnum)])
 plot(formula=accuracy~k, data=test_k,type="o",ylim=c(0.5,1), pch=20, col=3, main="validation-optimal k")
 with(test_k,text(accuracy~k,labels = k,pos=1,cex=0.7))
+```
 
+```{r}
 # minimum k for the highest accuracy
 min(test_k[test_k$accuracy %in% max(accuracy_k),"k"])
+```
 
+k = 7에서 정확도(.98)가 가장 높음
+
+- 최종 kNN모형 (k=7)
+
+
+```{r}
 #k=7 knn
 md1<-knn(train=iris.train,test=iris.test,cl=trainLabels,k=7)
 CrossTable(x=testLabels,y=md1, prop.chisq=FALSE)
+```
 
+```
+- 정확도 : 49/50 -> 98%
+- versicolor를 virginica로 오분류(1개)
+- 오분류율 : 1/50 ->2%
+```
+
+## 6.kNN(k=7)의 결과-그래픽
+
+```{r}
 # graphic display
 plot(formula=Petal.Length ~ Petal.Width,
      data=iris.train,col=alpha(c("purple","blue","green"),0.7)[trainLabels],
@@ -162,21 +185,53 @@ legend("bottomright",
        col=c(rep(alpha(c("purple","blue","green"),0.7),2)),
        cex=0.9
 )
+```
 
+- petal.width와 petal.length에 산점도를 그려보면 setosa는 잘 분류됨.
+- virginica와 versicolor는 분류가 잘 되지 않음.
+
+## 7.Weighted kNN
+- 거리에 따라 가중치를 부여하는 두 가지 알고리즘이 존재 (패키지 : kknn)
+
+
+```{r}
 ## Weighted KNN packages
 install.packages("kknn")#weighted value knn
 library(kknn)
 help("kknn")
+```
 
+## 7.Weighted kNN 결과
+
+- k=5, distance=1
+```{r}
 # weighted knn
 md2<-kknn(Species~., train=train,test=iris.test,k=5,distance=1,kernel="triangular")
 md2
+```
+
+- weighted kNN의 결과를 md2로 저장
+- weighted kNN의 결과를 보기 위해서 fitted함수를 이용(fitted(md2))
+
+```{r}
 # to see results for weighted knn
 md2_fit<-fitted(md2)
 md2_fit
+```
+
+
+```{r}
 # accuracy of weighted knn
 CrossTable(x=testLabels,y=md2_fit,prop.chisq=FALSE,prop.c=FALSE)
+```
 
+- 정확도 : 47/50 -> 94%
+- versicolor를 virginica로 오분류(2개)
+- virginica를 versicolor로 오분류(1개)
+
+- k =7, distance=2로 옵션 변경한 결과
+
+```{r}
 # weighted knn (k=7, distance=2)
 md3<-kknn(Species~., train=train,test=iris.test,k=7,distance=2,kernel="triangular")
 md3
@@ -185,4 +240,8 @@ md3_fit<-fitted(md3)
 md3_fit
 # accuracy of weighted knn
 CrossTable(x=testLabels,y=md3_fit,prop.chisq=FALSE,prop.c=FALSE)
+```
+
+- 정확도 : 49/50 -> 98%
+- virginica를 versicolor로 오분류(1개)
 
