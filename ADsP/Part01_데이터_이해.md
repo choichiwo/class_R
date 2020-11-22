@@ -1,7 +1,7 @@
 ---
 title: "Part01. 데이터 이해"
-author: "ne-choi"
-date: '2020-11-12'
+author: "choi"
+date: '2020-11-19'
 tags:
   - "ADsP"
   - "ADSP자격증"

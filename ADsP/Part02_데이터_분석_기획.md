@@ -1,7 +1,7 @@
 ---
 title: "Part02. 데이터 분석 기획"
-author: "ne-choi"
-date: '2020-11-14'
+author: "choi"
+date: '2020-11-20'
 tags:
   - "ADsP"
   - "ADSP자격증"

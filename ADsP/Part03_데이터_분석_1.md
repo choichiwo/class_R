@@ -1,7 +1,7 @@
 ---
 title: "Part03. 데이터 분석_1"
-author: "ne_choi"
-date: '2020 11 16 '
+author: "choi"
+date: '2020 11 21 '
 tags:
   - "ADsP"
   - "ADSP자격증"
